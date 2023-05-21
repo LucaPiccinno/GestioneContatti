@@ -1,9 +1,9 @@
-package gestione_contatti.model;
+package gestione_contatti.dto;
 
 import jakarta.persistence.Entity;
 
 @Entity
-public class Contatto {
+public class ContattoDto {
 
 	private String surname;
 	private String name;

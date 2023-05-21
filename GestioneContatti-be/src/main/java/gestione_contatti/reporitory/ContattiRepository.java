@@ -1,0 +1,13 @@
+package gestione_contatti.reporitory;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import gestione_contatti.dto.ContattoDto;
+
+@Repository
+public interface ContattiRepository{
+	 
+}

@@ -5,24 +5,27 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import gestione_contatti.dao.ContattiDao;
-import gestione_contatti.model.Contatto;
+import gestione_contatti.dao.ContattoDao;
+import gestione_contatti.dto.ContattoDto;
+import gestione_contatti.factory.ContattiFactory;
+import jakarta.websocket.server.PathParam;
 
 @RestController
 public class ContattiController {
 
 	@Autowired
-	ContattiDao contattiDao;
+	private ContattiFactory contattiFactory;
 	
-	@RequestMapping(value = "/show", method = RequestMethod.GET)
-	public ResponseEntity<List<Contatto>> mostraContatto(){
+	@RequestMapping(value = "/contacts", method = RequestMethod.GET)
+	public ResponseEntity<List<ContattoDto>> mostraContatto(){
 		
-		List<Contatto> contatti = contattiDao.getListContatti();
+		List<ContattoDto> contatti = contattiFactory.getListContatti();
 		
 		if(contatti.isEmpty()) {
 			return ResponseEntity.ok().body(contatti);
@@ -31,21 +34,21 @@ public class ContattiController {
 		}
 	}
 	
-	@RequestMapping(value = "/add", method = RequestMethod.PUT)
-	public ResponseEntity<Contatto> aggiungiContatto(@RequestBody Contatto contatto){
-		//DA FARE
-		return null;
+	@RequestMapping(value = "/contact", method = RequestMethod.PUT)
+	public ResponseEntity<ContattoDto> aggiungiContatto(@RequestBody ContattoDto contattoDto){
+		ContattoDto contattoCreate = contattiFactory.save(contattoDto);
+		return ResponseEntity.ok(contattoCreate);
 	}
 	
-	@RequestMapping(value = "/modify/", method = RequestMethod.PUT)
-	public ResponseEntity<Contatto> modificaContatto(){
-		//DA FARE
-		return null;
+	@RequestMapping(value = "/contact/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<ContattoDto> modificaContatto(@PathVariable final Long id, final ContattoDto contattoDto){
+		contattiFactory.updateById(id, contattoDto);
+		return ResponseEntity.ok(null);
 	}
 	
-	@RequestMapping(value = "delete/", method = RequestMethod.DELETE)
-	public ResponseEntity<Contatto> eliminaContatto(){
-		//DA FARE
-		return null;
+	@RequestMapping(value = "/contact/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<ContattoDto> eliminaContatto(@PathVariable final Long id){
+		contattiFactory.deleteById(id);
+		return ResponseEntity.ok(null);
 	}
 }
